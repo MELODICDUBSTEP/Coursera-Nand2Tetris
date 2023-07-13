@@ -1,0 +1,65 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+
+/**
+ * 8-way demultiplexor:
+ * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
+ *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+ */
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    // Put your code here:
+	Not(in = sel[0], out = notsel0);
+	Not(in = sel[1], out = notsel1);
+	Not(in = sel[2], out = notsel2);
+
+	//And3(a = notsel0, b = notsel1, c = notsel2, out = tempa);
+	And(a = notsel0, b = notsel1, out = temp1);
+	And(a = temp1, b = notsel2, out = tempa);
+	And(a = tempa, b = in, out = a);
+
+	//And3(a = notsel0, b = notsel1, c = sel[2], out = tempb);
+	And(a = notsel0, b = notsel1, out = temp2);
+	And(a = temp2, b = sel[2], out = tempb);
+	And(a = tempb, b = in, out = e);
+
+	//And3(a = notsel0, b = sel[1], c = notsel2, out = tempc);
+	And(a = notsel0, b = sel[1], out = temp3);
+	And(a = temp3, b = notsel2, out = tempc);
+	And(a = tempc, b = in, out = c);
+	
+	//And3(a = notsel0, b = sel[1], c = sel[2], out = tempd);
+	And(a = notsel0, b = sel[1], out = temp4);
+	And(a = temp4, b = sel[2], out = tempd);
+	And(a = tempd, b = in, out = g);
+
+	//And3(a = sel[0], b = notsel1, c = notsel2, out = tempe);
+	And(a = sel[0], b = notsel1, out = temp5);
+	And(a = temp5, b = notsel2, out = tempe);
+	And(a = tempe, b = in, out = b);
+	
+	//And3(a = sel[0], b = notsel1, c = sel[2], out = tempf);
+	
+	And(a = sel[0], b = notsel1, out = temp6);
+	And(a = temp6, b = sel[2], out = tempf);
+	And(a = tempf, b = in, out = f);
+
+	//And3(a = sel[0], b = sel[1], c = notsel2, out = tempg);
+	And(a = sel[0], b = sel[1], out = temp7);
+	And(a = temp7, b = notsel2, out = tempg);
+	And(a = tempg, b = in, out = d);
+
+	//And3(a = sel[0], b = sel[1], c = sel[2], out = temph);
+	And(a = sel[0], b = sel[1], out = temp8);
+ 	And(a = temp8, b = sel[2], out = temph);
+	And(a = temph, b = in, out = h);
+
+}
